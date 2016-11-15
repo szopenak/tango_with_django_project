@@ -1,6 +1,7 @@
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_django_project.settings')
 
+import random
 import django
 django.setup()
 from rango.models import Category, Page
@@ -37,13 +38,13 @@ cats = {"Python": {"pages": python_pages},
 
 def add_cat(name):
     c = Category.objects.get_or_create(name=name)[0]
-    if name is 'Python':
+    if name == 'Python':
         c.views = 128
         c.likes = 64
-    if name is 'Django':
+    if name == 'Django':
         c.views = 64
         c.likes = 32
-    else:
+    if name == 'Other Frameworks':
         c.views = 32
         c.likes = 16
     c.save()
@@ -51,7 +52,9 @@ def add_cat(name):
 
 
 def add_page(cat, title, url, views=0):
-    p = Page.objects.get_or_create(category=cat, title=title, url=url, views=views)[0]
+    p = Page.objects.get_or_create(category=cat, title=title, url=url)[0]
+    p.views = random.randrange(0, 100)
+    p.save()
     return p
 
 

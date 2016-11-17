@@ -11,7 +11,7 @@ def validate_page_name(name):
 
 
 def validate_category_name(name):
-    
+
     try:
         checker = Category.objects.get(name=name)
         raise forms.ValidationError("Specified category already exists!")

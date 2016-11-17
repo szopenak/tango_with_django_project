@@ -3,7 +3,7 @@ from django.http import HttpResponse
 import datetime
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm
-
+from django.core.urlresolvers import reverse
 
 def index(request):
     # Construct a dictionary to pass to the template engine as its context.
@@ -67,7 +67,7 @@ def add_category(request):
             # We could give a confirmation message
             # But since the most recent category added is on the index page
             # Then we can direct the user back to the index page.
-            return index(request)
+            return render(request, 'rango/add_category.html', {'form': form})
         else:
             # The supplied form contained errors -
             # just print them to the terminal.

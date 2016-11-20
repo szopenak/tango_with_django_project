@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ error_type }} - {{ msg }}</title>
+</head>
+<body>
+    <h1>{{ error_type }}</h1>
+    <h2>{{ msg }}</h2>
+    {% if error_type == "Log in error" %}
+    <a href="{% url 'user_login' %}">Try again!</a>
+    {% else %}
+    <a href="{% url 'index' %}">Return to home site!</a>
+    {% endif %}
+</body>
+</html>

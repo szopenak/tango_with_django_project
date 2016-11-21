@@ -41,4 +41,6 @@
         <img src="{% static "images/rango.jpg" %}"
         alt="Picture of Rango" />
     </div>
+    <p> visits: {{ request.session.visits }}</p>
+    <p>last visit: {{ request.COOKIES.last_visit }}</p>
 {% endblock %}

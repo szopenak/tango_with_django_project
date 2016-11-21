@@ -12,6 +12,16 @@
         <h3>But here's the cat first from media folder</h3>
         <br>
         <img src="{{MEDIA_URL}}cat.jpg">
-        This tutorial has been put together by
+        <br>
+        This tutorial has been put together by...
+        <br>
+        {% if request.COOKIES.test_cookie %}
+            <h3>You have cookie! It contains: {{ request.COOKIES.test_cookie }}</h3>
+        {% else %}
+            <h3>You dont't have test cookie!</h3>
+        {% endif %}
+        {% if request.session.visits %}
+            <h3>Visits counter: {{ request.session.visits }}</h3>
+        {% endif %}
     </div>
 {% endblock %}

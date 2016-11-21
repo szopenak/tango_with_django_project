@@ -117,6 +117,8 @@ MEDIA_URL = '/media/'
 #######
 # redirect for decorator not_logged
 LOGIN_URL = '/rango/login/'
+##### COOKIE DURATION (true if session cookie expires after closing webbrowser)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 ##################################################
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

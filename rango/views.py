@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 
+from django.shortcuts import redirect
+
 
 def index(request):
     # Construct a dictionary to pass to the template engine as its context.
@@ -253,3 +255,19 @@ def get_server_side_cookie(request, cookie, default_val=None):
     if not val:
         val = default_val
     return val
+
+
+def track_url(request):
+    page_id = None
+    if request.method == 'GET':
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+    if page_id is None:
+        return redirect('index')
+    else:
+        page = Page.objects.get(id=page_id)
+        page.views += 1
+        page.save()
+        return redirect(page.url)
+
+

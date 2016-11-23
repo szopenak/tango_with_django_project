@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rango',
+    'registration',
 ]
 
 MIDDLEWARE = [
@@ -115,10 +116,22 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 #######
-# redirect for decorator not_logged
-LOGIN_URL = '/rango/login/'
+# redirect for decorator not_logged (old version)
+# LOGIN_URL = '/rango/login/'
 ##### COOKIE DURATION (true if session cookie expires after closing webbrowser)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+###### redux django authentication
+# If True, users can register
+REGISTRATION_OPEN = True
+# One-week activation window; you may, of course, use a different value.
+ACCOUNT_ACTIVATION_DAYS = 7
+# If True, the user will be automatically logged in.
+REGISTRATION_AUTO_LOGIN = True
+# The page you want users to arrive at after they successfully log in
+LOGIN_REDIRECT_URL = '/rango/'
+# The page users are directed to if they are not logged in,
+# and are trying to access pages requiring authentication
+LOGIN_URL = '/accounts/login/'
 ##################################################
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

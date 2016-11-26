@@ -1,0 +1,23 @@
+span.kafel_likes{
+    border-radius: 5px;
+    background: #0000FF;
+    padding: 20px;
+    font-weight: bold;
+    color:white;
+    text-align: center;
+    font-size:10px;
+    padding:5px;
+    margin-left:10px;
+}
+
+span.kafel_views{
+    border-radius: 5px;
+    background: #73AD21;
+    padding: 20px;
+    font-weight: bold;
+    color:white;
+    text-align: center;
+    font-size:10px;
+    padding:5px;
+    margin-left:10px;
+}

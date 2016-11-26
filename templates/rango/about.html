@@ -1,5 +1,6 @@
 {% extends 'rango/base.html' %}
 {% load staticfiles %}
+
 {% block title_block %}About{% endblock %}
 
 {% block body_block %}
@@ -24,4 +25,14 @@
             <h3>Visits counter: {{ request.session.visits }}</h3>
         {% endif %}
     </div>
+    <button class="btn btn-primary" id="about-btn">
+    Click Me - I'm JavaScript on Speed</button>
+    <p>This is a example</p>
+<button class="btn btn-primary"
+onClick="alert('You clicked the button using JavaScript.');">
+Click Me - I run JavaScript
+</button>
+    <p>This is another example</p>
 {% endblock %}
+
+

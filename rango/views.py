@@ -10,8 +10,9 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-
+from django.forms.models import model_to_dict
 from django.shortcuts import redirect
+from rango.models import UserProfile
 
 
 def index(request):
@@ -38,6 +39,7 @@ def about(request):
     context_dict['visits'] = request.session['visits']
     response = render(request, 'rango/about.html', context=context_dict)
     response.set_cookie('test_cookie', "True")
+
     return response
 
 
@@ -50,9 +52,11 @@ def show_category(request, category_name_slug):
         # If we can't, the .get() method raises a DoesNotExist exception.
         # So the .get() method returns one model instance or raises an exception.
         category = Category.objects.get(slug=category_name_slug)
+        category.views += 1
+        category.save()
         # Retrieve all of the associated pages.
         # Note that filter() will return a list of page objects or an empty list
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=category).order_by('-views')
         # Adds our results list to the template context under name pages.
         context_dict['pages'] = pages
         # We also add the category object from
@@ -271,3 +275,76 @@ def track_url(request):
         return redirect(page.url)
 
 
+@login_required
+def register_profile(request):
+    form = UserProfileForm()
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+            return redirect('index')
+        else:
+            print(form.errors)
+    context_dict = {'form': form}
+    return render(request, 'rango/profile_registration.html', context_dict)
+
+
+@login_required
+def profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return redirect('index')
+    userprofile = UserProfile.objects.get_or_create(user=user)[0]
+    form = UserProfileForm(
+        {'website': userprofile.website, 'picture': userprofile.picture})
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('profile', user.username)
+        else:
+            print(form.errors)
+    return render(request, 'rango/profile.html',
+    {'userprofile': userprofile, 'selecteduser': user, 'form': form})
+
+
+@login_required
+def list_profiles(request):
+    userprofile_list = UserProfile.objects.all()
+    return render(request, 'rango/list_users.html', {'userprofile_list' : userprofile_list})
+
+
+@login_required
+def like_category(request):
+    cat_id = None
+    if request.method == 'GET':
+        cat_id = request.GET['category_id']
+        likes = 0
+    if cat_id:
+        cat = Category.objects.get(id=int(cat_id))
+        if cat:
+            likes = cat.likes + 1
+            cat.likes = likes
+            cat.save()
+    return HttpResponse(likes)
+
+
+def get_category_list(max_results=0, starts_with=''):
+    cat_list = []
+    if starts_with:
+        cat_list = Category.objects.filter(name__istartswith=starts_with)
+    if max_results > 0:
+        if len(cat_list) > max_results:
+            cat_list = cat_list[:max_results]
+    return cat_list
+
+
+def suggest_category(request):
+    cat_list = []
+    if request.method == 'GET':
+        starts_with = request.GET['suggestion']
+        cat_list = get_category_list(8, starts_with)
+    return render(request, 'rango/cats.html', {'cats': cat_list})

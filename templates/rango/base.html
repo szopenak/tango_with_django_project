@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 {% load rango_template_tags %}
+
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -22,6 +23,7 @@
     <link href=
         "http://v4-alpha.getbootstrap.com/examples/dashboard/dashboard.css"
         rel="stylesheet">
+    <link href="{% static 'css/mycss.css' %}" rel="stylesheet">
   </head>
 
   <body>
@@ -45,24 +47,54 @@
                         <a class="nav-item nav-link"
                         href="{% url 'add_category' %}">
                         Add a New Category</a>
-                    <a class="nav-item nav-link"
-                        href="{% url 'auth_logout' %}?next=/rango/">Logout</a>
-                        {% else %}
-                    <a class="nav-item nav-link"
-                        href="{% url 'registration_register' %}">Register Here</a>
-                    <a class="nav-item nav-link"
-                        href="{% url 'auth_login' %}">Login</a>
+                        <a class="nav-item nav-link"
+                             href="{% url 'profile' user.username %}">Profile</a>
+                        <a class="nav-item nav-link"
+                            href="{% url 'list_profiles' %}">Users</a>
+                        <a class="nav-item nav-link"
+                            href="{% url 'auth_logout' %}?next=/rango/">Logout</a>
+                    {% else %}
+                        <a class="nav-item nav-link"
+                            href="{% url 'registration_register' %}">Register Here</a>
+                        <a class="nav-item nav-link"
+                            href="{% url 'auth_login' %}">Login</a>
                     {% endif %}
+
                     </nav>
                 </div>
       </nav>
       <div class="container-fluid">
             <!--add sidebar later!-->
-            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <div class="row">
+            <div class="sidebar" style="width:200px;">
+
+                <ul class="nav nav-list">
+                    <li class="nav-header">Find a category...</li>
+                    <form>
+                    <li><input class="search-query form-control" type="text"
+                    name="suggestion" value="" id="suggestion" placeholder="Type here" />
+                    </li>
+                    </form>
+                 </ul>
+                    <hr>
+                    <div id="cats">
+                    </div>
+                    <br>
+                     <strong>All categories:</strong>
+                    {% block sidebar_block %}
+                    {% get_category_list %}
+                    {% endblock %}
+            </div>
+
+
+
+            <div style="margin: 10px 10px 10px 200px" id="bodyblock">
                 {% block body_block %}{% endblock %}
             </div>
             </div>
-      </div>
+          </div>
+
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -78,7 +110,12 @@
     "http://v4-alpha.getbootstrap.com/assets/js/ie10-viewport-bug-workaround.j\
     s">
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="{% static "js/rango-jquery.js" %}"></script>
+    <script src="{% static "js/rango-ajax.js" %}"></script>
 </body>
+
+
 
 
 
